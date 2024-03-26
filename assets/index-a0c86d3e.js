@@ -35,7 +35,7 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
             
 <b>GitHub</b>: <a href="https://github.com/mjebalidev" target="_blank">Click me</a>
 
-<b>LinkedIn</b>: <a href="https://www.linkedin.com/in/mehdi-jebali-b03068210/" target="_blank">Click me</a>
+<b>LinkedIn</b>: <a href="https://www.linkedin.com/in/mjebali/" target="_blank">Click me</a>
 
 `.replace(/\n/g,"<br>")},man:`
 
