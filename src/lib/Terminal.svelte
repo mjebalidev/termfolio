@@ -253,6 +253,7 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
     logToTerminal("Hi 👋 Welcome to my Portfolio!");
     logToTerminal("Enter the command <b>man</b> to see all the commands");
     setInterval(toggleCursorVisibility, 1000); // Toggle cursor visibility every 500ms
+    history = [];
   });
 </script>
 
@@ -372,9 +373,10 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
     top: 0;
     right: 0;
     margin-top: 1px; /* Adjust vertical alignment */
-    margin-left: 5px; /* Adjust horizontal alignment */
+    margin-left: -5px; /* Adjust horizontal alignment */
     width: 10px; /* Adjust cursor width as needed */
     color: #fff; /* Cursor color */
+    z-index: 2;
   }
 
   .work-in-progress {
