@@ -1,0 +1,18 @@
+DEVOTEAM
+- Job Title: Full Stack Developer
+- Employment Type: Work Study
+- Duration: May 2023 - Present (11 months)
+- Location: Frankfurt, Hesse, Germany (Remote)
+- Tools: Bash, Java, JavaScript, Docker etc
+
+MEETYOO
+- Job Title: Technical Operations Manager
+- Employment Type: Work Study
+- Duration: Jan 2022 - Apr 2023 (1 year 4 months)
+- Location: Berlin, Germany
+- Tools: Python (programming language), XML
+
+- Job Title: IT Support & Configuration
+- Employment Type: Work Study
+- Duration: Sept 2020 - Jan 2022 (1 year 5 months)
+- Tools: Python (programming language), XML
