@@ -1,5 +1,20 @@
 <script>
     import { onMount } from 'svelte';
+    // @ts-ignore
+    import Keyboard from "svelte-keyboard";
+
+    let showVirtualKeyboard = false;
+
+  function toggleVirtualKeyboard() {
+    showVirtualKeyboard = !showVirtualKeyboard;
+  }
+
+  const onKeydown = (event) => {
+    console.log(event.detail);
+    const key = event.detail;
+    // Simulate keypress event
+    handleEvents({ key, code: key });
+  }
 
     let text = '';
     let text_in_array = [];
@@ -236,10 +251,50 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
             </div>
         </div>
         <div class="work-in-progress">Work in progress ...</div>
+        <div class="virtual-keyboard-container">
+            {#if showVirtualKeyboard}
+              <div class="virtual-keyboard-wrapper">
+                <Keyboard on:keydown={onKeydown} />
+              </div>
+            {/if}
+        </div>
+        <button on:click={toggleVirtualKeyboard} class="virtual-keyboard-button">Display Virtual Keyboard</button>
     </div>
 </main>
 
 <style>
+  .virtual-keyboard-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 1%;
+    max-height: 300px; /* Adjust the maximum height of the keyboard */
+    overflow: auto; /* Enable scrolling if the keyboard exceeds the maximum height */
+    border: 1px solid #ccc; /* Add border for visual separation */
+    background-color: #ebebebd0; /* Background color for the keyboard */
+    z-index: 1; /* Ensure the keyboard appears above other elements */
+  }
+
+  .virtual-keyboard-wrapper {
+    max-height: 100%; /* Make the wrapper fill the container height */
+  }
+
+  .virtual-keyboard-button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 2; /* Ensure the button appears above the keyboard */
+  }
     .renderer {
         position: fixed;
         top: 0;
@@ -247,7 +302,7 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
         right: 0;
         bottom: 0;
         z-index: 0;
-        background-color: rgba(0, 128, 0, 0.9); /* Dark green background with opacity */
+        background-color: rgba(18, 67, 18, 0.9); /* Dark green background with opacity */
         background-image: url('/src/assets/wp.webp'); /* Replace 'linux_background.jpg' with your image path */
         background-size: cover;
         background-position: center;
