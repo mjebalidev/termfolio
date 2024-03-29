@@ -214,7 +214,7 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
   function downloadFile(filename) {
     // Simulate file download
     const link = document.createElement("a");
-    link.href = "/public/" + filename; // Replace with the actual file URL
+    link.href = filename; // Replace with the actual file URL
     link.download = filename;
     document.body.appendChild(link);
     link.click();
@@ -282,7 +282,33 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
 
   // Initialize cursor blinking on component mount
   onMount(() => {
-    logToTerminal("Starting the server...", false);
+    logToTerminal("Starting the server", false);
+    setTimeout(() => {
+      clearTerminal();
+      logToTerminal("Server started .", false);
+    }, 500);
+    setTimeout(() => {
+      clearTerminal();
+      logToTerminal("Server started ..", false);
+    }, 1000);
+    setTimeout(() => {
+      clearTerminal();
+      logToTerminal("Server started ...", false);
+    }, 1500);
+    setTimeout(() => {
+      clearTerminal();
+      logToTerminal("Server started ....", false);
+    }, 2000);
+    setTimeout(() => {
+      clearTerminal();
+      logToTerminal("Server started .....", false);
+    }, 2500);
+    setTimeout(() => {
+      clearTerminal();
+      // Simulate successful server start
+      logToTerminal("Server started successfully!", false);
+    }, 3000);
+
     logToTerminal("Hi 👋 Welcome to my Portfolio!", false);
     logToTerminal(
       "Enter the command <b>man</b> to see all the commands",
