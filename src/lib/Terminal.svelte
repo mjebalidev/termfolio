@@ -24,6 +24,8 @@
   let json_container = [];
   let history_counter = 1;
   let special_keys_list = [
+    "Escape",
+    "Tab",
     "CapsLock",
     "Backspace",
     "Shift",
@@ -34,6 +36,7 @@
     "AltGraph",
     "Enter",
     "Space",
+    "Dead",
     " ",
     "ArrowRight",
     "ArrowLeft",
@@ -112,41 +115,45 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
     if (!special_keys_list.includes(key)) {
       text_in_array.push(key);
       text = text_in_array.join("");
-    }
+    } else {
+      if (ctrlPressed && key === "c") {
+        // Handle CTRL + C combination
+        logToTerminal("^C", false);
+        // Add your logic for CTRL + C combination here
+      }
 
-    if (ctrlPressed && key === "c") {
-      // Handle CTRL + C combination
-      logToTerminal("^C", false);
-      // Add your logic for CTRL + C combination here
-    }
+      if (key === "Backspace") {
+        if (text_in_array.length > 0) {
+          text_in_array.pop();
+          text = text_in_array.join("");
+        }
+      }
 
-    if (key === "Backspace") {
-      if (text_in_array.length > 0) {
-        text_in_array.pop();
+      if (key === "Tab") {
+        event.preventDefault(); // Prevent default Tab behavior
+        //autocompleteCommand();
+      }
+
+      if (key === " " || key === "Space" || code === "Space") {
+        text_in_array.push(" ");
         text = text_in_array.join("");
       }
-    }
 
-    if (key === "Tab") {
-      event.preventDefault(); // Prevent default Tab behavior
-      //autocompleteCommand();
-    }
+      if (key === "Escape") {
+        console.log("Escape key pressed");
+      }
 
-    if (key === " " || key === "Space" || code === "Space") {
-      text_in_array.push(" ");
-      text = text_in_array.join("");
-    }
+      if (key === "Enter") {
+        executeCommand(text);
+      } else if (key === "ArrowUp") {
+        navigateHistory(1);
+      } else if (key === "ArrowDown") {
+        navigateHistory(-1);
+      }
 
-    if (key === "Enter") {
-      executeCommand(text);
-    } else if (key === "ArrowUp") {
-      navigateHistory(1);
-    } else if (key === "ArrowDown") {
-      navigateHistory(-1);
+      console.log("text: " + text);
+      console.log("text_in_array: " + text_in_array);
     }
-
-    console.log("text: " + text);
-    console.log("text_in_array: " + text_in_array);
   }
 
   function executeCommand(command) {
