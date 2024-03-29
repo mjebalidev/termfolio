@@ -109,6 +109,11 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
     let ctrlPressed = event.ctrlKey; // Check if CTRL key is pressed
     console.log("key: " + key + " code: " + code);
 
+    if (!special_keys_list.includes(key)) {
+      text_in_array.push(key);
+      text = text_in_array.join("");
+    }
+
     if (ctrlPressed && key === "c") {
       // Handle CTRL + C combination
       logToTerminal("^C");
@@ -125,12 +130,6 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
     if (key === "Tab") {
       event.preventDefault(); // Prevent default Tab behavior
       //autocompleteCommand();
-    }
-
-    if (!special_keys_list.includes(key)) {
-      console.log("Normal key pressed " + key);
-      text_in_array.push(key);
-      text = text_in_array.join("");
     }
 
     if (key === " " || key === "Space" || code === "Space") {
@@ -281,17 +280,20 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
   <div class="renderer">
     <div class="terminal-box">
       {#each json_container as old_entry}
-        <p class="text-terminal text-entry">
-          guest@portfolio ~ {@html old_entry.content}
+        <p class="text-terminal">
+          <span class="text-pwd">guest@portfolio ~ </span><span
+            >{@html old_entry.content}</span
+          >
         </p>
       {/each}
-      <div class="text-terminal text-entry" style="position: relative;">
-        guest@portfolio ~ {text}
+      <p class="text-terminal">
+        <span class="text-pwd">guest@portfolio ~</span>
+        <span class="text-entry">{text}</span>
         <span
           class="cursor"
           style="visibility: {cursorVisible ? 'visible' : 'hidden'};">█</span
         >
-      </div>
+      </p>
     </div>
     <div class="work-in-progress">Work in progress ...</div>
     <div class="virtual-keyboard-container">
@@ -369,6 +371,7 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
   }
 
   .terminal-box {
+    display: inline-block;
     position: relative;
     width: 80%; /* Adjust width as needed */
     height: 70%; /* Adjust height as needed */
@@ -389,11 +392,16 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
     margin: 0;
     padding: 0;
     text-align: left; /* Align text to the left */
+    position: relative;
   }
 
   .text-entry {
-    margin-bottom: 5px; /* Adjust spacing between text entries */
+    display: inline-block;
     position: relative; /* Required for cursor positioning */
+  }
+
+  .text-pwd {
+    color: rgb(198, 196, 191); /* Green text color */
   }
 
   .cursor {
