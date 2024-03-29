@@ -285,23 +285,23 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
     logToTerminal("Starting the server", false);
     setTimeout(() => {
       clearTerminal();
-      logToTerminal("Server started .", false);
+      logToTerminal("Server starting .", false);
     }, 500);
     setTimeout(() => {
       clearTerminal();
-      logToTerminal("Server started ..", false);
+      logToTerminal("Server starting ..", false);
     }, 1000);
     setTimeout(() => {
       clearTerminal();
-      logToTerminal("Server started ...", false);
+      logToTerminal("Server starting ...", false);
     }, 1500);
     setTimeout(() => {
       clearTerminal();
-      logToTerminal("Server started ....", false);
+      logToTerminal("Server starting ....", false);
     }, 2000);
     setTimeout(() => {
       clearTerminal();
-      logToTerminal("Server started .....", false);
+      logToTerminal("Server starting .....", false);
     }, 2500);
     setTimeout(() => {
       clearTerminal();
@@ -309,11 +309,16 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
       logToTerminal("Server started successfully!", false);
     }, 3000);
 
-    logToTerminal("Hi 👋 Welcome to my Portfolio!", false);
-    logToTerminal(
-      "Enter the command <b>man</b> to see all the commands",
-      false
-    );
+    setTimeout(() => {
+      clearTerminal();
+      // Simulate successful server start
+      logToTerminal("Server started successfully!", false);
+      logToTerminal("Hi 👋 Welcome to my Portfolio!", false);
+      logToTerminal(
+        "Enter the command <b>man</b> to see all the commands",
+        false
+      );
+    }, 3500);
     setInterval(toggleCursorVisibility, 1000); // Toggle cursor visibility every 500ms
   });
 </script>
