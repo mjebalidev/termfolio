@@ -99,6 +99,8 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Example: cat myprojects.txt
         
         `.replace(/\n/g, "<br>"),
+    cd: "cd: Permission Denied",
+    chmod: "chmod: Permission Denied",
   };
 
   let currentCommandIndex = -1;
@@ -329,13 +331,13 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
     <div class="terminal-box">
       {#each jsonContainer as old_entry}
         <p class="text-terminal">
-          <span class="text-pwd">guest@portfolio ~ </span><span
+          <span class="text-pwd">guest@portfolio ~/guest </span><span
             >{@html old_entry.content}</span
           >
         </p>
       {/each}
       <p class="text-terminal">
-        <span class="text-pwd">guest@portfolio ~</span>
+        <span class="text-pwd">guest@portfolio ~/guest </span>
         <span class="text-entry">{text}</span>
         <span
           class="cursor"
