@@ -1,6 +1,5 @@
 <script>
   // @ts-nocheck
-
   import { onMount } from "svelte";
   // @ts-ignore
   import Keyboard from "svelte-keyboard";
@@ -157,41 +156,48 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
       content: entry,
     }));
 
-    if (command === "clear") {
-      clearTerminal();
-    } else if (command === "download cv.pdf") {
-      downloadFile("cv.pdf");
-      logToTerminal("Downloading cv.pdf ...", false);
-    } else if (command === "download projects.txt") {
-      downloadFile("projects.txt");
-      logToTerminal("Downloading projects.txt ...", false);
-    } else if (command === "download about.me") {
-      downloadFile("about.me");
-      logToTerminal("Downloading about.me ...", false);
-    } else if (command === "download social.txt") {
-      downloadFile("social.txt");
-      logToTerminal("Downloading social.txt ...", false);
-    } else if (command === "") {
-      //logToTerminal("")
-    } else {
-      let parts = command.split(" ");
-      let action = parts[0];
-      let args = parts.slice(1);
+    switch (command) {
+      case "clear":
+        clearTerminal();
+        break;
+      case "download cv.pdf":
+        downloadFile("cv.pdf");
+        logToTerminal("Downloading cv.pdf ...", false);
+        break;
+      case "download projects.txt":
+        downloadFile("projects.txt");
+        logToTerminal("Downloading projects.txt ...", false);
+        break;
+      case "download about.me":
+        downloadFile("about.me");
+        logToTerminal("Downloading about.me ...", false);
+        break;
+      case "download social.txt":
+        downloadFile("social.txt");
+        logToTerminal("Downloading social.txt ...", false);
+        break;
+      case "":
+        //logToTerminal("")
+        break;
+      default:
+        let parts = command.split(" ");
+        let action = parts[0];
+        let args = parts.slice(1);
 
-      if (commands[action]) {
-        if (typeof commands[action] === "string") {
-          logToTerminal(commands[action], false);
-        } else if (typeof commands[action] === "object") {
-          let target = args[0];
-          if (commands[action][target]) {
-            logToTerminal(commands[action][target], false);
-          } else {
-            logToTerminal(`cat: ${target}: No such file or directory`, false);
+        if (commands[action]) {
+          if (typeof commands[action] === "string") {
+            logToTerminal(commands[action], false);
+          } else if (typeof commands[action] === "object") {
+            let target = args[0];
+            if (commands[action][target]) {
+              logToTerminal(commands[action][target], false);
+            } else {
+              logToTerminal(`cat ${args}: No such file or directory`, false);
+            }
           }
+        } else {
+          logToTerminal(`${action}: command not found`, false);
         }
-      } else {
-        logToTerminal(`${action}: command not found`, false);
-      }
     }
     command_history.unshift(command);
     text = "";
