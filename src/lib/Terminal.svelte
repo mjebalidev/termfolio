@@ -11,19 +11,18 @@
   }
 
   const onKeydown = (event) => {
-    console.log(event.detail);
     const key = event.detail;
     // Simulate keypress event
     handleEvents({ key, code: key });
   };
 
   let text = "";
-  let text_in_array = [];
+  let textInArray = [];
   let history = [];
-  let command_history = [];
-  let json_container = [];
-  let history_counter = 1;
-  let special_keys_list = [
+  let commandHistory = [];
+  let jsonContainer = [];
+  let historyCounter = 1;
+  let specialKeysList = [
     "Escape",
     "Tab",
     "CapsLock",
@@ -110,55 +109,55 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
     let key = event.key;
     let code = event.code;
     let ctrlPressed = event.ctrlKey; // Check if CTRL key is pressed
-    console.log("key: " + key + " code: " + code);
 
-    if (!special_keys_list.includes(key)) {
-      text_in_array.push(key);
-      text = text_in_array.join("");
+    if (!specialKeysList.includes(key)) {
+      textInArray.push(key);
+      text = textInArray.join("");
     } else {
-      if (ctrlPressed && key === "c") {
-        // Handle CTRL + C combination
-        logToTerminal("^C", false);
-        // Add your logic for CTRL + C combination here
+      switch (key) {
+        case "Backspace":
+          if (textInArray.length > 0) {
+            textInArray.pop();
+            text = textInArray.join("");
+          }
+          break;
+        case "Tab":
+          event.preventDefault(); // Prevent default Tab behavior
+          //autocompleteCommand();
+          break;
+        case " ":
+        case "Space":
+          textInArray.push(" ");
+          text = textInArray.join("");
+          break;
+        case "Escape":
+          if (showVirtualKeyboard) {
+            showVirtualKeyboard = false;
+          }
+          break;
+        case "Enter":
+          executeCommand(text);
+          break;
+        case "ArrowUp":
+          navigateHistory(1);
+          break;
+        case "ArrowDown":
+          navigateHistory(-1);
+          break;
+        case ctrlPressed && key === "c":
+          // Handle CTRL + C combination
+          logToTerminal("^C", false);
+          // Add your logic for CTRL + C combination here
+          break;
+        default:
+          break;
       }
-
-      if (key === "Backspace") {
-        if (text_in_array.length > 0) {
-          text_in_array.pop();
-          text = text_in_array.join("");
-        }
-      }
-
-      if (key === "Tab") {
-        event.preventDefault(); // Prevent default Tab behavior
-        //autocompleteCommand();
-      }
-
-      if (key === " " || key === "Space" || code === "Space") {
-        text_in_array.push(" ");
-        text = text_in_array.join("");
-      }
-
-      if (key === "Escape") {
-        console.log("Escape key pressed");
-      }
-
-      if (key === "Enter") {
-        executeCommand(text);
-      } else if (key === "ArrowUp") {
-        navigateHistory(1);
-      } else if (key === "ArrowDown") {
-        navigateHistory(-1);
-      }
-
-      console.log("text: " + text);
-      console.log("text_in_array: " + text_in_array);
     }
   }
 
   function executeCommand(command) {
     history.push(command);
-    json_container = history.map((entry, index) => ({
+    jsonContainer = history.map((entry, index) => ({
       key: index + 1,
       content: entry,
     }));
@@ -184,7 +183,6 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
         logToTerminal("Downloading social.txt ...", false);
         break;
       case "":
-        //logToTerminal("")
         break;
       default:
         let parts = command.split(" ");
@@ -206,9 +204,9 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
           logToTerminal(`${action}: command not found`, false);
         }
     }
-    command_history.unshift(command);
+    commandHistory.unshift(command);
     text = "";
-    text_in_array = [];
+    textInArray = [];
     currentCommandIndex = -1;
     currentCommand = "";
   }
@@ -245,35 +243,33 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
 
   function clearTerminal() {
     text = "";
-    text_in_array = [];
+    textInArray = [];
     history = [];
-    json_container = [];
-    history_counter = 1;
+    jsonContainer = [];
+    historyCounter = 1;
   }
 
   function navigateHistory(direction) {
-    console.log("command_history", command_history);
     let newIndex = currentCommandIndex + direction;
-    if (newIndex >= 0 && newIndex < command_history.length) {
+    if (newIndex >= 0 && newIndex < commandHistory.length) {
       currentCommandIndex = newIndex;
-      currentCommand = command_history[currentCommandIndex];
+      currentCommand = commandHistory[currentCommandIndex];
       text = currentCommand;
-      text_in_array = currentCommand.split("");
+      textInArray = currentCommand.split("");
     } else if (newIndex === -1) {
       currentCommandIndex = -1;
       currentCommand = "";
       text = "";
-      text_in_array = [];
+      textInArray = [];
     }
-    console.log("command_history", command_history);
   }
 
   function logToTerminal(message, saveToHistory = true) {
     if (saveToHistory) {
-      command_history.push(message);
+      commandHistory.push(message);
     }
     history.push(message);
-    json_container = history.map((entry, index) => ({
+    jsonContainer = history.map((entry, index) => ({
       key: index + 1,
       content: entry,
     }));
@@ -300,7 +296,7 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
 <main>
   <div class="renderer">
     <div class="terminal-box">
-      {#each json_container as old_entry}
+      {#each jsonContainer as old_entry}
         <p class="text-terminal">
           <span class="text-pwd">guest@portfolio ~ </span><span
             >{@html old_entry.content}</span
