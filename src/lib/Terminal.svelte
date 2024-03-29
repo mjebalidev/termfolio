@@ -21,6 +21,7 @@
   let text = "";
   let text_in_array = [];
   let history = [];
+  let command_history = [];
   let json_container = [];
   let history_counter = 1;
   let special_keys_list = [
@@ -116,7 +117,7 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
 
     if (ctrlPressed && key === "c") {
       // Handle CTRL + C combination
-      logToTerminal("^C");
+      logToTerminal("^C", false);
       // Add your logic for CTRL + C combination here
     }
 
@@ -160,16 +161,16 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
       clearTerminal();
     } else if (command === "download cv.pdf") {
       downloadFile("cv.pdf");
-      logToTerminal("Downloading cv.pdf ...");
+      logToTerminal("Downloading cv.pdf ...", false);
     } else if (command === "download projects.txt") {
       downloadFile("projects.txt");
-      logToTerminal("Downloading projects.txt ...");
+      logToTerminal("Downloading projects.txt ...", false);
     } else if (command === "download about.me") {
       downloadFile("about.me");
-      logToTerminal("Downloading about.me ...");
+      logToTerminal("Downloading about.me ...", false);
     } else if (command === "download social.txt") {
       downloadFile("social.txt");
-      logToTerminal("Downloading social.txt ...");
+      logToTerminal("Downloading social.txt ...", false);
     } else if (command === "") {
       //logToTerminal("")
     } else {
@@ -179,20 +180,20 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
 
       if (commands[action]) {
         if (typeof commands[action] === "string") {
-          logToTerminal(commands[action]);
+          logToTerminal(commands[action], false);
         } else if (typeof commands[action] === "object") {
           let target = args[0];
           if (commands[action][target]) {
-            logToTerminal(commands[action][target]);
+            logToTerminal(commands[action][target], false);
           } else {
-            logToTerminal(`cat: ${target}: No such file or directory`);
+            logToTerminal(`cat: ${target}: No such file or directory`, false);
           }
         }
       } else {
-        logToTerminal(`${action}: command not found`);
+        logToTerminal(`${action}: command not found`, false);
       }
     }
-
+    command_history.unshift(command);
     text = "";
     text_in_array = [];
     currentCommandIndex = -1;
@@ -238,10 +239,11 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
   }
 
   function navigateHistory(direction) {
+    console.log("command_history", command_history);
     let newIndex = currentCommandIndex + direction;
-    if (newIndex >= 0 && newIndex < history.length) {
+    if (newIndex >= 0 && newIndex < command_history.length) {
       currentCommandIndex = newIndex;
-      currentCommand = history[currentCommandIndex];
+      currentCommand = command_history[currentCommandIndex];
       text = currentCommand;
       text_in_array = currentCommand.split("");
     } else if (newIndex === -1) {
@@ -250,9 +252,13 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
       text = "";
       text_in_array = [];
     }
+    console.log("command_history", command_history);
   }
 
-  function logToTerminal(message) {
+  function logToTerminal(message, saveToHistory = true) {
+    if (saveToHistory) {
+      command_history.push(message);
+    }
     history.push(message);
     json_container = history.map((entry, index) => ({
       key: index + 1,
@@ -267,11 +273,13 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
 
   // Initialize cursor blinking on component mount
   onMount(() => {
-    logToTerminal("Starting the server...");
-    logToTerminal("Hi 👋 Welcome to my Portfolio!");
-    logToTerminal("Enter the command <b>man</b> to see all the commands");
+    logToTerminal("Starting the server...", false);
+    logToTerminal("Hi 👋 Welcome to my Portfolio!", false);
+    logToTerminal(
+      "Enter the command <b>man</b> to see all the commands",
+      false
+    );
     setInterval(toggleCursorVisibility, 1000); // Toggle cursor visibility every 500ms
-    history = [];
   });
 </script>
 
