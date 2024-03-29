@@ -1,4 +1,6 @@
 <script>
+  // @ts-nocheck
+
   import { onMount } from "svelte";
   // @ts-ignore
   import Keyboard from "svelte-keyboard";
@@ -31,6 +33,8 @@
     "Alt",
     "AltGraph",
     "Enter",
+    "Space",
+    " ",
     "ArrowRight",
     "ArrowLeft",
   ];
@@ -109,16 +113,28 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
       // Handle CTRL + C combination
       logToTerminal("^C");
       // Add your logic for CTRL + C combination here
-    } else if (key === "Backspace") {
+    }
+
+    if (key === "Backspace") {
       if (text_in_array.length > 0) {
         text_in_array.pop();
         text = text_in_array.join("");
       }
-    } else if (key === "Tab") {
+    }
+
+    if (key === "Tab") {
       event.preventDefault(); // Prevent default Tab behavior
       //autocompleteCommand();
-    } else if (!special_keys_list.includes(key)) {
+    }
+
+    if (!special_keys_list.includes(key)) {
+      console.log("Normal key pressed " + key);
       text_in_array.push(key);
+      text = text_in_array.join("");
+    }
+
+    if (key === " " || key === "Space" || code === "Space") {
+      text_in_array.push(" ");
       text = text_in_array.join("");
     }
 
@@ -129,6 +145,9 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
     } else if (key === "ArrowDown") {
       navigateHistory(-1);
     }
+
+    console.log("text: " + text);
+    console.log("text_in_array: " + text_in_array);
   }
 
   function executeCommand(command) {
@@ -277,40 +296,49 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
     <div class="work-in-progress">Work in progress ...</div>
     <div class="virtual-keyboard-container">
       {#if showVirtualKeyboard}
-        <div class="virtual-keyboard-wrapper">
-          <Keyboard on:keydown={onKeydown} --height="3rem" />
-        </div>
+        <Keyboard
+          class="svelte-keyboard"
+          on:keydown={onKeydown}
+          --height="2.5rem"
+          --flex="1"
+        />
       {/if}
     </div>
+
     <button on:click={toggleVirtualKeyboard} class="virtual-keyboard-button"
-      >Display Virtual Keyboard</button
+      ><div class="keyboard-icon">⌨️</div></button
     >
   </div>
 </main>
 
 <style>
+  .svelte-keyboard button.key {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .keyboard-icon {
+    font-size: 1.7rem;
+  }
+
   .virtual-keyboard-container {
     position: fixed;
+    display: block;
     bottom: 0;
     left: 0;
     right: 0;
-    margin-left: 25%;
-    margin-right: 25%;
-    margin-bottom: 1%;
-    max-height: 300px; /* Adjust the maximum height of the keyboard */
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 2%;
     overflow: auto; /* Enable scrolling if the keyboard exceeds the maximum height */
     border: 1px solid #ccc; /* Add border for visual separation */
     background-color: #ebebebd0; /* Background color for the keyboard */
     z-index: 1; /* Ensure the keyboard appears above other elements */
   }
 
-  .virtual-keyboard-wrapper {
-    max-height: 100%; /* Make the wrapper fill the container height */
-  }
-
   .virtual-keyboard-button {
-    position: absolute;
-    bottom: 0;
+    position: fixed;
+    top: 0;
     left: 0;
     margin: 10px;
     padding: 10px 14px;
@@ -343,7 +371,7 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
   .terminal-box {
     position: relative;
     width: 80%; /* Adjust width as needed */
-    height: 80%; /* Adjust height as needed */
+    height: 70%; /* Adjust height as needed */
     margin: auto;
     background-color: rgba(0, 0, 0, 0.7); /* Dark background with opacity */
     border-radius: 10px;
