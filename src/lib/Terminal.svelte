@@ -5,17 +5,6 @@
   import Keyboard from "svelte-keyboard";
 
   let showVirtualKeyboard = false;
-
-  function toggleVirtualKeyboard() {
-    showVirtualKeyboard = !showVirtualKeyboard;
-  }
-
-  const onKeydown = (event) => {
-    const key = event.detail;
-    // Simulate keypress event
-    handleEvents({ key, code: key });
-  };
-
   let text = "";
   let textInArray = [];
   let history = [];
@@ -85,6 +74,7 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
 <b>LinkedIn</b>: <a href="https://www.linkedin.com/in/mjebali/" target="_blank">Click me</a>
 
 `.replace(/\n/g, "<br>"), // Replace newlines with HTML line breaks
+      "cv.pdf": `Cannot display PDF files in the terminal. Please download the file using the 'download cv.pdf' command.`,
     },
     man: `
 
@@ -96,16 +86,27 @@ If you need further information, feel free to <a href="mailto:mjebali.dev@gmail.
         <b>download</b> &lt;file&gt;: Downloads a file.
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Example: download cv.pdf
         <b>cat</b> &lt;file&gt;: Displays the current file text.
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Example: cat myprojects.txt
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Example: cat projects.txt
         
         `.replace(/\n/g, "<br>"),
     cd: "cd: Permission Denied",
     chmod: "chmod: Permission Denied",
+    sudo: "sudo: Permission Denied",
   };
 
   let currentCommandIndex = -1;
   let currentCommand = "";
   let cursorVisible = true;
+
+  function toggleVirtualKeyboard() {
+    showVirtualKeyboard = !showVirtualKeyboard;
+  }
+
+  const onKeydown = (event) => {
+    const key = event.detail;
+    // Simulate keypress event
+    handleEvents({ key, code: key });
+  };
 
   function handleEvents(event) {
     let key = event.key;
